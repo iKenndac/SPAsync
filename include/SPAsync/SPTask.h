@@ -27,15 +27,32 @@ typedef SPTask*(^SPTaskChainCallback)(id value);
     @return self, in case you want to add more call/errbacks on the same task */
 - (instancetype)addCallback:(SPTaskCallback)callback on:(dispatch_queue_t)queue;
 
-/** @method addErrback:on:
+/** @method addCallback:
+ Add a callback to be called async when this task finishes, which will be called
+ on the main queue. If the task has already finished, the callback will be called immediately
+ (but still asynchronously)
+ @return self, in case you want to add more call/errbacks on the same task */
+- (instancetype)addCallback:(SPTaskCallback)callback;
+
+/** @method addErrorCallback:on:
     Like callback, but for when the task fails 
     @return self, in case you want to add more call/errbacks on the same task */
-- (instancetype)addErrback:(SPTaskErrback)errback on:(dispatch_queue_t)queue;
+- (instancetype)addErrorCallback:(SPTaskErrback)errback on:(dispatch_queue_t)queue;
+
+/** @method addErrorCallback:on:
+ Like callback, but for when the task fails
+ @return self, in case you want to add more call/errbacks on the same task */
+- (instancetype)addErrorCallback:(SPTaskErrback)errback;
 
 /** @method addFinally:on:
     Called on both success, failure and cancellation.
     @return self, in case you want to add more call/errbacks on the same task */
-- (instancetype)addFinally:(SPTaskFinally)finally on:(dispatch_queue_t)queue;
+- (instancetype)addFinallyCallback:(SPTaskFinally)finally on:(dispatch_queue_t)queue;
+
+/** @method addFinally:on:
+ Called on the main queue on both success, failure and cancellation.
+ @return self, in case you want to add more call/errbacks on the same task */
+- (instancetype)addFinallyCallback:(SPTaskFinally)finally;
 
 /** @method then:on:
     Add a callback, and return a task that represents the return value of that
